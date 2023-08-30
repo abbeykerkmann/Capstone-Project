@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+    http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd">
+
+    <changeSet id="0" author="Adel Wehbi">
+        <createTable tableName="tbl_user">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="varchar(255)"/>
+            <column name="phone" type="varchar(20)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1" author="Adel Wehbi">
+        <createTable tableName="tbl_listings">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text"/>
+            <column name="quantity" type="int"/>
+            <column name="price" type="double"/>
+            <column name="available" type="boolean"/>
+            <column name="location" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="Adel Wehbi">
+        <renameTable oldTableName="tbl_user" newTableName="tbl_users"/>
+    </changeSet>
+
+    <changeSet id="3" author="Abbey Kerkmann">
+        <addColumn tableName="tbl_listings">
+            <column name="user_id" type="integer">
+                <constraints nullable="false" foreignKeyName="fk_listing_user" references="tbl_users(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="4" author="Abbey Kerkmann">
+        <addColumn tableName="tbl_listings">
+            <column name="title" type="text"/>
+        </addColumn>
+        <addColumn tableName="tbl_listings">
+            <column name="units" type="text"/>
+        </addColumn>
+        <dropColumn tableName="tbl_listings">
+            <column name="type"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="5" author="Adel Wehbi">
+        <addUniqueConstraint tableName="tbl_users" columnNames="username"/>
+    </changeSet>
+
+    <changeSet id="6" author="Abbey Kerkmann">
+        <createTable tableName="tbl_tags">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="text">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+        <insert tableName="tbl_tags">
+            <column name="name" value="organic"/>
+        </insert>
+        <insert tableName="tbl_tags">
+            <column name="name" value="vegetables"/>
+        </insert>
+        <insert tableName="tbl_tags">
+            <column name="name" value="fruits"/>
+        </insert>
+        <insert tableName="tbl_tags">
+            <column name="name" value="carrots"/>
+        </insert>
+        <insert tableName="tbl_tags">
+            <column name="name" value="peppers"/>
+        </insert>
+        <insert tableName="tbl_tags">
+            <column name="name" value="cucumbers"/>
+        </insert>
+        <insert tableName="tbl_tags">
+            <column name="name" value="apples"/>
+        </insert>
+        <insert tableName="tbl_tags">
+            <column name="name" value="tomatoes"/>
+        </insert>
+        <insert tableName="tbl_tags">
+            <column name="name" value="strawberries"/>
+        </insert>
+        <insert tableName="tbl_tags">
+            <column name="name" value="onions"/>
+        </insert>
+        <insert tableName="tbl_tags">
+            <column name="name" value="celery"/>
+        </insert>
+        <insert tableName="tbl_tags">
+            <column name="name" value="peaches"/>
+        </insert>
+        <insert tableName="tbl_tags">
+            <column name="name" value="grapes"/>
+        </insert>
+        <insert tableName="tbl_tags">
+            <column name="name" value="farm"/>
+        </insert>
+        <insert tableName="tbl_tags">
+            <column name="name" value="garden"/>
+        </insert>
+        <rollback>
+            <dropTable tableName="tbl_tags"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="7" author="Abbey Kerkmann">
+        <createTable tableName="tbl_listings_tags">
+            <column name="listing_id" type="integer">
+                <constraints primaryKey="true" foreignKeyName="fk_listing_id" references="tbl_listings(id)"/>
+            </column>
+            <column name="tag_id" type="integer">
+                <constraints primaryKey="true" foreignKeyName="fk_tag_id" references="tbl_tags(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+  <changeSet id="8" author="Eleanor Rumsey">
+    <createTable tableName="tbl_listing_images">
+      <column name="id" type="integer" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="listing_id" type="integer">
+        <constraints foreignKeyName="fk_listing_image_id" references="tbl_listings(id)"/>
+      </column>
+      <column name="file_name" type="text"/>
+      <column name="content" type="text"/>
+    </createTable>
+  </changeSet>
+
+</databaseChangeLog>
